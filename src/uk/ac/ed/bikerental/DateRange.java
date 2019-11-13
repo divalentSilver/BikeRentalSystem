@@ -31,9 +31,9 @@ public class DateRange {
 
     public Boolean overlaps(DateRange other) {
         // TODO: Does the range overlap if the start and end date are equal?
-        assert false;
-        // Overlaps if this range's end is after the other's start or if this range's start is before the other's end
-        return this.getEnd().isAfter(other.getStart()) || this.getStart().isBefore(other.getEnd());
+        // Overlaps if this range's start or end is within the range of the other DateRange
+        return (this.getEnd().isAfter(other.getStart()) && this.getEnd().isBefore(other.getEnd())) ||
+                (this.getStart().isAfter(other.getStart()) && this.getStart().isBefore(other.getEnd()));
     }
 
     @Override
@@ -54,6 +54,5 @@ public class DateRange {
         DateRange other = (DateRange) obj;
         return Objects.equals(end, other.end) && Objects.equals(start, other.start);
     }
-    
-    // You can add your own methods here
+
 }

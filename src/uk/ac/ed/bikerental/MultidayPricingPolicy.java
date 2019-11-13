@@ -25,20 +25,19 @@ public class MultidayPricingPolicy implements PricingPolicy {
     }
 
     /**
-     * Calculate the price for a single bike for a given duration
+     * Calculate the price for a single bike for a given duration. Does not include a discount
      *
      * @param bike to calculate the price for
      * @param duration of the rental
      * @return the price for the customer
      */
     private BigDecimal calculatePrice(Bike bike, DateRange duration) {
-        // Retrieve the price and discount from the maps
-        BigDecimal price = bikePrices.get(bike.getType());
-        Map.Entry<Long, BigDecimal> discount = discounts.floorEntry(duration.toDays());
-        assert discount != null;
-        assert price != null;
+        // Retrieve the daily price and calculate the total price for the duration
+        BigDecimal dailyPrice = bikePrices.get(bike.getType());
+        assert dailyPrice != null;
+        BigDecimal price = dailyPrice.multiply(new BigDecimal(duration.toDays()));
 
-        return applyDiscount(price, discount.getValue());
+        return price;
     }
 
 
@@ -56,7 +55,7 @@ public class MultidayPricingPolicy implements PricingPolicy {
     }
 
     /**
-     * Calculate the total price for several bikes over the given duration
+     * Calculate the total price for several bikes over the given duration. Discount is applied
      *
      * @param bikes to be rented
      * @param duration for the bikes to be rented
@@ -68,6 +67,12 @@ public class MultidayPricingPolicy implements PricingPolicy {
         for (Bike bike: bikes) {
             total = total.add(calculatePrice(bike, duration));
         }
+
+        // Apply a discount if it exists
+        Map.Entry<Long, BigDecimal> discount = discounts.floorEntry(duration.toDays());
+        if (discount != null)
+            total = applyDiscount(total, discount.getValue());
+
         return total;
     }
 
