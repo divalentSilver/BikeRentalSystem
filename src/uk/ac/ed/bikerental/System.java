@@ -10,13 +10,13 @@ public class System {
         providers = new LinkedList<>();
     }
 
-    public Collection<Quote> getQuotes(Location location, DateRange dateRange, Collection<BikeType> bikes) {
+    public LinkedList<Quote> getQuotes(Location location, DateRange dateRange, Collection<BikeType> bikes) {
         // Assertions to ensure the user includes valid information
         assert location != null;
         assert dateRange != null;
         assert bikes != null && !bikes.isEmpty();
 
-        Collection<Quote> ret = new LinkedList<>();
+        LinkedList<Quote> ret = new LinkedList<>();
         for (Provider provider: providers)
             // Only add quotes from providers that are close enough
             if (provider.getLocation().isNearTo(location)) {
