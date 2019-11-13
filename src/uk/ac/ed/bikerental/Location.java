@@ -13,6 +13,7 @@ public class Location {
     /**
      * This method compares two locations and determines if they are near enough for collection/delivery of bikes.
      * We do this by simply comparing the first two characters in their postal codes.
+     *
      * @param other location to be compared against
      * @return true if near, otherwise false
      */
@@ -21,13 +22,20 @@ public class Location {
               other.getPostcode().substring(0, 2));
     }
 
+    /**
+     * Get the postal code of the location in a String format
+     * @return postal code
+     */
     public String getPostcode() {
         return postcode;
     }
 
+    /**
+     * Get the address of the location in a String format
+     * @return address
+     */
     public String getAddress() {
         return address;
     }
 
-    // You can add your own methods here
 }

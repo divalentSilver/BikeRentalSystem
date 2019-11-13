@@ -15,6 +15,7 @@ public class MultidayPricingPolicy implements PricingPolicy {
 
     /**
      * Calculates the final price that a customer pays
+     *
      * @param price set by provider
      * @param discount that needs to be applied to the price
      * @return the final price that will be charged to the customer
@@ -25,6 +26,7 @@ public class MultidayPricingPolicy implements PricingPolicy {
 
     /**
      * Calculate the price for a single bike for a given duration
+     *
      * @param bike to calculate the price for
      * @param duration of the rental
      * @return the price for the customer
@@ -44,6 +46,7 @@ public class MultidayPricingPolicy implements PricingPolicy {
 
     /**
      * Set the daily rental price for a type of bike
+     *
      * @param bikeType is the type of bike
      * @param dailyPrice is the price to set it at
      */
@@ -54,6 +57,7 @@ public class MultidayPricingPolicy implements PricingPolicy {
 
     /**
      * Calculate the total price for several bikes over the given duration
+     *
      * @param bikes to be rented
      * @param duration for the bikes to be rented
      * @return the total price
@@ -69,6 +73,7 @@ public class MultidayPricingPolicy implements PricingPolicy {
 
     /**
      * Set the day at which a specified discount begins
+     *
      * @param startDay of the discount
      * @param percentage of the discount
      */
