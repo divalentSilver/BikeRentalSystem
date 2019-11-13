@@ -2,16 +2,13 @@ package uk.ac.ed.bikerental;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class MultidayPricingPolicy implements PricingPolicy {
-    private HashMap<BikeType, BigDecimal> bikePrices = new HashMap<>();
+public class MultidayPricingPolicy extends DefaultPricingPolicy {
+    // We use a TreeMap for the ability to retrieve the entry below a key if it does not exist
     private TreeMap<Long, BigDecimal> discounts = new TreeMap<>();
 
-
-    // Private Methods
 
     /**
      * Calculates the final price that a customer pays
@@ -25,36 +22,6 @@ public class MultidayPricingPolicy implements PricingPolicy {
     }
 
     /**
-     * Calculate the price for a single bike for a given duration. Does not include a discount
-     *
-     * @param bike to calculate the price for
-     * @param duration of the rental
-     * @return the price for the customer
-     */
-    private BigDecimal calculatePrice(Bike bike, DateRange duration) {
-        // Retrieve the daily price and calculate the total price for the duration
-        BigDecimal dailyPrice = bikePrices.get(bike.getType());
-        assert dailyPrice != null;
-        BigDecimal price = dailyPrice.multiply(new BigDecimal(duration.toDays()));
-
-        return price;
-    }
-
-
-    // Public Methods
-
-    /**
-     * Set the daily rental price for a type of bike
-     *
-     * @param bikeType is the type of bike
-     * @param dailyPrice is the price to set it at
-     */
-    @Override
-    public void setDailyRentalPrice(BikeType bikeType, BigDecimal dailyPrice) {
-        bikePrices.put(bikeType, dailyPrice);
-    }
-
-    /**
      * Calculate the total price for several bikes over the given duration. Discount is applied
      *
      * @param bikes to be rented
@@ -63,10 +30,7 @@ public class MultidayPricingPolicy implements PricingPolicy {
      */
     @Override
     public BigDecimal calculatePrice(Collection<Bike> bikes, DateRange duration) {
-        BigDecimal total = new BigDecimal(0);
-        for (Bike bike: bikes) {
-            total = total.add(calculatePrice(bike, duration));
-        }
+        BigDecimal total = super.calculatePrice(bikes, duration);
 
         // Apply a discount if it exists
         Map.Entry<Long, BigDecimal> discount = discounts.floorEntry(duration.toDays());
@@ -83,6 +47,8 @@ public class MultidayPricingPolicy implements PricingPolicy {
      * @param percentage of the discount
      */
     public void setDiscount(Long startDay, BigDecimal percentage) {
+        // The Provider should not be able to set a negative discount
+        assert percentage.abs().equals(percentage);
         discounts.put(startDay, percentage);
     }
 
