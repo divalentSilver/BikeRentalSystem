@@ -10,12 +10,12 @@ public class Provider {
     private PricingPolicy pricingPolicy;
     private ValuationPolicy valuationPolicy;
 
-    public Provider(String name, Location location) {
+    public Provider(String name, Location location, PricingPolicy pricingPolicy, ValuationPolicy valuationPolicy) {
         this.name = name;
         this.location = location;
         bikes = new LinkedList<>();
-        // TODO: Add Pricing/Valuation Policies
-        assert false;
+        this.pricingPolicy = pricingPolicy;
+        this.valuationPolicy = valuationPolicy;
     }
 
     public Location getLocation() {
@@ -30,6 +30,18 @@ public class Provider {
         return valuationPolicy;
     }
 
+    public void addBike(Bike bike) {
+        bikes.add(bike);
+    }
+
+    /**
+     * Search for bikes to fulfill the request that is given to the Provider. If the request is not able to be
+     * fulfilled, this returns null. Otherwise, a Quote will be returned.
+     *
+     * @param dateRange to look for the bikes
+     * @param bikeRequests is a collection of BikeTypes to be fulfillled
+     * @return a Quote if the request can be fulfilled, otherwise null
+     */
     public Quote generateQuote(DateRange dateRange, Collection<BikeType> bikeRequests) {
         Collection<Bike> validBikes = new LinkedList<>();
         for (Bike bike: bikes)

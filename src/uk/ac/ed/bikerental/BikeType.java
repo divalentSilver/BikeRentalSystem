@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class BikeType {
     // To avoid duplicate BikeTypes, keep a static map of them
-    private static HashMap<String, BikeType> bikeTypes;
+    private static HashMap<String, BikeType> bikeTypes = new HashMap<>();
 
     private BigDecimal replacementValue;
 
@@ -18,11 +18,11 @@ public class BikeType {
         bikeTypes.put(name, this);
     }
 
-    public BigDecimal getReplacementValue() {
-        return replacementValue;
+    public static BikeType findType(String name) {
+        return bikeTypes.get(name);
     }
 
-    public BikeType getTypeFromString(String name) {
-        return bikeTypes.get(name);
+    public BigDecimal getReplacementValue() {
+        return replacementValue;
     }
 }

@@ -24,5 +24,21 @@ public class Quote {
             deposit = deposit.add(provider.getValuationPolicy().calculateValue(bike, dateRange.getStart()));
     }
 
+    public Provider getProvider() {
+        return provider;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public BigDecimal getDeposit() {
+        return deposit;
+    }
+
+    public DateRange getDateRange() {
+        return dateRange;
+    }
+
     // TODO: Implement book
 }
