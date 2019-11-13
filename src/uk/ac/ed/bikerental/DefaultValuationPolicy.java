@@ -4,14 +4,20 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class DefaultValuationPolicy implements ValuationPolicy {
-    private static final BigDecimal HUNDRED = new BigDecimal(100);
     private BigDecimal depositRate;
 
-    // Can be specified as either a decimal or a percentage. If the value given is greater than or equal to 1,
-    // it is treated a percentage.
+    // Can
+
+    /**
+     * Create a new DefaultValuationPolicy. The deposit rate can be specified as either a decimal or a percentage.
+     * If the value given is greater than or equal to 1, it is treated a percentage.
+     *
+     * @param depositRate, either a percentage or decimal
+     */
     public DefaultValuationPolicy(BigDecimal depositRate) {
         if (depositRate.compareTo(BigDecimal.ONE) >= 0)
-            depositRate = depositRate.divide(HUNDRED);
+            // Convert percentages to decimals for simplicity
+            depositRate = depositRate.movePointLeft(2);
         this.depositRate = depositRate;
     }
 

@@ -20,7 +20,6 @@ public class Quote {
         deposit = BigDecimal.ZERO;
         for (Bike bike: bikes)
             // Calculate the deposit of each bike and sum them up
-            // TODO: Maybe move into valuation policy class
             deposit = deposit.add(provider.getValuationPolicy().calculateValue(bike, dateRange.getStart()));
     }
 

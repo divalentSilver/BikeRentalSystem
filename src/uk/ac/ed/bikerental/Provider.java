@@ -14,6 +14,8 @@ public class Provider {
         this.name = name;
         this.location = location;
         bikes = new LinkedList<>();
+
+        // These policies may differ from Provider to Provider, so take in as argument
         this.pricingPolicy = pricingPolicy;
         this.valuationPolicy = valuationPolicy;
     }
@@ -35,8 +37,9 @@ public class Provider {
     }
 
     /**
-     * Search for bikes to fulfill the request that is given to the Provider. If the request is not able to be
-     * fulfilled, this returns null. Otherwise, a Quote will be returned.
+     * Search for bikes to fulfill the request that is given to the Provider. If the Provider is able to find bikes
+     * that completely fulfill the request, and the request itself has at least one bike, then it will return a Quote.
+     * Otherwise, null will be returned
      *
      * @param dateRange to look for the bikes
      * @param bikeRequests is a collection of BikeTypes to be fulfillled
@@ -51,7 +54,7 @@ public class Provider {
                 bikeRequests.remove(bike.getType());
             }
         // If bike requests have all been fulfilled, return Quote, otherwise null
-        if (bikeRequests.isEmpty())
+        if (bikeRequests.isEmpty() && !validBikes.isEmpty())
             return new Quote(this, dateRange, validBikes);
         return null;
     }

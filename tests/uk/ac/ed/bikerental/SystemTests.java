@@ -22,8 +22,8 @@ public class SystemTests {
         Provider bill = new Provider("Bill's", loc1, pricingPolicy, valuationPolicy);
 
         // Define the bikes
-        Bike racing = new Bike(new BikeType("racing", new BigDecimal(10000)));
-        Bike mountain = new Bike(new BikeType("mountain", new BigDecimal(1000)));
+        Bike racing = new Bike(BikeType.setBikeType("racing", new BigDecimal(10000)));
+        Bike mountain = new Bike(BikeType.setBikeType("mountain", new BigDecimal(1000)));
 
         /// Create the system, add the bikes, and set their prices
         system = new System();

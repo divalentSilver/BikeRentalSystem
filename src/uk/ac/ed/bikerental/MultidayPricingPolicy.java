@@ -33,6 +33,7 @@ public class MultidayPricingPolicy extends DefaultPricingPolicy {
         BigDecimal total = super.calculatePrice(bikes, duration);
 
         // Apply a discount if it exists
+        // We use the floorEntry to find the discount that is closest to the date range
         Map.Entry<Long, BigDecimal> discount = discounts.floorEntry(duration.toDays());
         if (discount != null)
             total = applyDiscount(total, discount.getValue());

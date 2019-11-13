@@ -18,6 +18,7 @@ public class Bike {
 
     /**
      * Checks if the bike is busy for the date range that is given
+     *
      * @param dateRange to be checked
      * @return true if busy, false if not busy
      */
@@ -31,6 +32,7 @@ public class Bike {
 
     /**
      * Marks the bike as busy for the specified date range, if the bike is already not busy during the date range
+     *
      * @param dateRange that will be marked busy for the bike
      * @return true if successfully marked busy, false if not
      */

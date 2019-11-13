@@ -17,7 +17,7 @@ public class DefaultPricingPolicy implements PricingPolicy {
     private BigDecimal calculatePrice(Bike bike, DateRange duration) {
         // Retrieve the daily price and multiply by days
         BigDecimal dailyPrice = bikePrices.get(bike.getType());
-        assert dailyPrice != null;
+        assert dailyPrice != null;  // Ensure that the daily price is defined
         BigDecimal price = dailyPrice.multiply(new BigDecimal(duration.toDays()));
 
         return price;
