@@ -23,6 +23,11 @@ public class Bike {
         return bikeType;
     }
 
+    public boolean markFree(DateRange dateRange) {
+        busyDates.remove(dateRange);
+        return true;
+    }
+
     /**
      * Checks if the bike is busy for the date range that is given
      *

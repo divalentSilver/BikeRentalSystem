@@ -40,7 +40,10 @@ public class Quote {
     }
 
     // TODO: Implement book
-    public Booking book() {
-        return new Booking();
+    public Booking book(String paymentInfo, boolean isDelivery) {
+        for (Bike bike: bikes)
+            if (bike.isBusy(dateRange))
+                return null;
+        return new Booking(paymentInfo, isDelivery);
     }
 }
