@@ -44,6 +44,6 @@ public class Quote {
         for (Bike bike: bikes)
             if (bike.isBusy(dateRange))
                 return null;
-        return new Booking(paymentInfo, isDelivery);
+        return new Booking(paymentInfo, this, isDelivery);
     }
 }
