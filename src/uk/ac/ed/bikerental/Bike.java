@@ -2,8 +2,7 @@ package uk.ac.ed.bikerental;
 
 import java.util.HashMap;
 
-public class Bike {
-
+public class Bike implements Deliverable {
     enum BikeStatus {
         atPartner,
         inRepair,
@@ -12,15 +11,21 @@ public class Bike {
     }
 
     private BikeType bikeType;
+    private Location location;
     private HashMap<DateRange, BikeStatus> busyDates;
 
-    public Bike(BikeType bikeType) {
+    public Bike(BikeType bikeType, Location location) {
         this.bikeType = bikeType;
+        this.location = location;
         this.busyDates = new HashMap<>();
     }
 
     public BikeType getType() {
         return bikeType;
+    }
+
+    public Location getLocation() {
+        return location;
     }
 
     public boolean markFree(DateRange dateRange) {
@@ -53,5 +58,16 @@ public class Bike {
             return false;
         busyDates.put(dateRange, status);
         return true;
+    }
+
+
+    @Override
+    public void onPickup() {
+        // TODO: Implement
+    }
+
+    @Override
+    public void onDropoff() {
+        // TODO: Implement
     }
 }

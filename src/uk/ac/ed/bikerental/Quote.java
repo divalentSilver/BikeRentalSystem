@@ -16,11 +16,11 @@ public class Quote {
         this.dateRange = dateRange;
 
         // Calculate price and deposit
-        price = provider.getPricingPolicy().calculatePrice(bikes, dateRange);
+        price = getProvider().getPricingPolicy().calculatePrice(bikes, dateRange);
         deposit = BigDecimal.ZERO;
-        for (Bike bike: bikes)
+        for (Bike bike: getBikes())
             // Calculate the deposit of each bike and sum them up
-            deposit = deposit.add(provider.getValuationPolicy().calculateValue(bike, dateRange.getStart()));
+            deposit = deposit.add(provider.getValuationPolicy().calculateValue(bike, getDateRange().getStart()));
     }
 
     public Provider getProvider() {
@@ -39,11 +39,29 @@ public class Quote {
         return dateRange;
     }
 
+    public Collection<Bike> getBikes() {
+        return bikes;
+    }
+
     // TODO: Implement book
-    public Booking book(String paymentInfo, boolean isDelivery) {
-        for (Bike bike: bikes)
-            if (bike.isBusy(dateRange))
+    public Booking book(String paymentInfo, Location deliveryLocation) {
+        // Check if bikes are still free
+        for (Bike bike: getBikes())
+            if (bike.isBusy(getDateRange()))
                 return null;
-        return new Booking(paymentInfo, this, isDelivery);
+        // Now mark the bikes are busy
+        for (Bike bike: getBikes())
+            bike.markBusy(getDateRange(), Bike.BikeStatus.withCustomer);
+        // Schedule delivery, if desired
+        if (deliveryLocation != null) {
+            for (Bike bike: getBikes())
+                DeliveryServiceFactory.getDeliveryService().scheduleDelivery(
+                        bike,
+                        bike.getLocation(),
+                        deliveryLocation,
+                        getDateRange().getStart()
+                );
+        }
+        return new Booking(this, paymentInfo);
     }
 }

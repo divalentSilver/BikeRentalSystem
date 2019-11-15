@@ -4,10 +4,15 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 public class System {
+    private static System system = new System();
     private Collection<Provider> providers;
 
-    public System() {
+    private System(){
         providers = new LinkedList<>();
+    }
+
+    public static System getSystem() {
+        return system;
     }
 
     public LinkedList<Quote> getQuotes(Location location, DateRange dateRange, Collection<BikeType> bikes) {
@@ -30,5 +35,9 @@ public class System {
 
     public void addProvider(Provider provider) {
         providers.add(provider);
+    }
+
+    public void resetSystem() {
+        system = new System();
     }
 }

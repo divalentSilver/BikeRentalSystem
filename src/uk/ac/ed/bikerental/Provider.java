@@ -32,8 +32,8 @@ public class Provider {
         return valuationPolicy;
     }
 
-    public void addBike(Bike bike) {
-        bikes.add(bike);
+    public void addBike(BikeType bikeType) {
+        bikes.add(new Bike(bikeType, location));
     }
 
     /**
