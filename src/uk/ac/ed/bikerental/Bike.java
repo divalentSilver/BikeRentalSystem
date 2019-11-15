@@ -1,15 +1,22 @@
 package uk.ac.ed.bikerental;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.HashMap;
 
 public class Bike {
+
+    enum BikeStatus {
+        atPartner,
+        inRepair,
+        inDelivery,
+        withCustomer
+    }
+
     private BikeType bikeType;
-    private Collection<DateRange> busyDates;
+    private HashMap<DateRange, BikeStatus> busyDates;
 
     public Bike(BikeType bikeType) {
         this.bikeType = bikeType;
-        this.busyDates = new LinkedList<>();
+        this.busyDates = new HashMap<>();
     }
 
     public BikeType getType() {
@@ -23,7 +30,7 @@ public class Bike {
      * @return true if busy, false if not busy
      */
     public boolean isBusy(DateRange dateRange) {
-        for (DateRange busyRange: busyDates) {
+        for (DateRange busyRange: busyDates.keySet()) {
             if (busyRange.overlaps(dateRange))
                 return true;
         }
@@ -36,9 +43,10 @@ public class Bike {
      * @param dateRange that will be marked busy for the bike
      * @return true if successfully marked busy, false if not
      */
-    public boolean markBusy(DateRange dateRange) {
+    public boolean markBusy(DateRange dateRange, BikeStatus status) {
         if (isBusy(dateRange))
             return false;
-        return busyDates.add(dateRange);
+        busyDates.put(dateRange, status);
+        return true;
     }
 }

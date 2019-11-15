@@ -40,4 +40,7 @@ public class Quote {
     }
 
     // TODO: Implement book
+    public Booking book() {
+        return new Booking();
+    }
 }
