@@ -3,7 +3,6 @@ package uk.ac.ed.bikerental;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
-import java.util.function.BooleanSupplier;
 
 public class DateRange {
     private LocalDate start, end;
@@ -29,11 +28,14 @@ public class DateRange {
         return ChronoUnit.DAYS.between(this.getStart(), this.getEnd());
     }
 
+    private Boolean withinRange(LocalDate date) {
+        return (date.isEqual(getStart()) || date.isAfter(getStart())) &&
+                (date.isEqual(getEnd()) || date.isBefore(getEnd()));
+    }
+
     public Boolean overlaps(DateRange other) {
-        // TODO: Does the range overlap if the start and end date are equal?
-        // Overlaps if this range's start or end is within the range of the other DateRange
-        return (this.getEnd().isAfter(other.getStart()) && this.getEnd().isBefore(other.getEnd())) ||
-                (this.getStart().isAfter(other.getStart()) && this.getStart().isBefore(other.getEnd()));
+        // Overlaps if the other range's start or end is within this date range
+        return this.withinRange(other.getStart()) || other.withinRange(this.getStart());
     }
 
     @Override

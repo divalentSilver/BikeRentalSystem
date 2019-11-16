@@ -2,8 +2,6 @@ package uk.ac.ed.bikerental;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 public class BikeType {
     // To avoid duplicate BikeTypes, keep a static map of them

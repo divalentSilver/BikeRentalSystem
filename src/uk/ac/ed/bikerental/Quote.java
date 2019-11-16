@@ -43,7 +43,15 @@ public class Quote {
         return bikes;
     }
 
-    // TODO: Implement book
+    /**
+     * This method books the quote and returns a booking, if successful. If a delivery location is specified,
+     * a delivery will also be scheduled for the beginning of the rental range.
+     *
+     * @param paymentInfo to pay for the booking
+     * @param deliveryLocation, null if no delivery is desired, otherwise the location of where the bikes should be
+     *                          dropped off
+     * @return booking if quote is successfully booked, else null
+     */
     public Booking book(String paymentInfo, Location deliveryLocation) {
         // Check if bikes are still free
         for (Bike bike: getBikes())

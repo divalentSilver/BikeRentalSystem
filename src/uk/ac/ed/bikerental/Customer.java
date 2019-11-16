@@ -9,7 +9,6 @@ public class Customer {
 
     private int customerID;
     private HashMap<Integer, Booking> bookings;
-    private LinkedList<Quote> retrievedQuotes;
 
     public Customer() {
         customerID = IDCounter++;
@@ -20,9 +19,12 @@ public class Customer {
         return customerID;
     }
 
+    public Booking getBooking(Integer ID) {
+        return bookings.get(ID);
+    }
+
     /**
-     * This retrieves quotes that fit the request's specifications, if they exist. These quotes are both stored
-     * in retrievedQuotes and returned.
+     * This retrieves quotes that fit the request's specifications, if they exist
      *
      * @param location where the customer wants the bikes
      * @param dateRange of the rental
@@ -30,24 +32,19 @@ public class Customer {
      * @return the quotes returned by the providers
      */
     public LinkedList<Quote> sendRequest(Location location, DateRange dateRange, Collection<BikeType> bikeTypes) {
-        retrievedQuotes = System.getSystem().getQuotes(location, dateRange, bikeTypes);
-        return retrievedQuotes;
+        return System.getSystem().getQuotes(location, dateRange, bikeTypes);
     }
 
     /**
-     * This method books the specified quote without delivery
+     * This method books the specified quote without delivery. Equivalent to calling bookQuote with delivery,
+     * but with the location specified as null.
      *
      * @param quote to be booked
      * @param paymentInfo to pay for the booking
      * @return true if successful, false if not
      */
     public boolean bookQuote(Quote quote, String paymentInfo) {
-        Booking booking = quote.book(paymentInfo, null);
-        if (booking != null) {
-            bookings.put(booking.getID(), booking);
-            return true;
-        }
-        return false;
+        return bookQuote(quote, paymentInfo, null);
     }
 
     /**

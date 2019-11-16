@@ -1,19 +1,22 @@
 package uk.ac.ed.bikerental;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Provider {
     private String name;
     private Location location;
     private Collection<Bike> bikes;
+    private HashMap<Integer, Booking> bookings;
     private PricingPolicy pricingPolicy;
     private ValuationPolicy valuationPolicy;
 
     public Provider(String name, Location location, PricingPolicy pricingPolicy, ValuationPolicy valuationPolicy) {
         this.name = name;
         this.location = location;
-        bikes = new LinkedList<>();
+        this.bikes = new LinkedList<>();
+        this.bookings = new HashMap<>();
 
         // These policies may differ from Provider to Provider, so take in as argument
         this.pricingPolicy = pricingPolicy;
@@ -22,6 +25,10 @@ public class Provider {
 
     public Location getLocation() {
         return location;
+    }
+
+    public Booking getBooking(Integer ID) {
+        return bookings.get(ID);
     }
 
     public PricingPolicy getPricingPolicy() {
@@ -34,6 +41,10 @@ public class Provider {
 
     public void addBike(BikeType bikeType) {
         bikes.add(new Bike(bikeType, location));
+    }
+
+    public void addBooking(Booking booking) {
+        bookings.put(booking.getID(), booking);
     }
 
     /**
@@ -58,7 +69,4 @@ public class Provider {
             return new Quote(this, dateRange, validBikes);
         return null;
     }
-
-    // TODO: Implement addBooking
-
 }

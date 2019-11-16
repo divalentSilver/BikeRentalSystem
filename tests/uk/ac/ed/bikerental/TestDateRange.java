@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class TestDateRange {
-    private DateRange dateRange1, dateRange2, dateRange3, dateRange4;
+    private DateRange dateRange1, dateRange2, dateRange3, dateRange4, dateRange5;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -20,7 +20,9 @@ class TestDateRange {
         this.dateRange3 = new DateRange(LocalDate.of(2015, 1, 7),
                 LocalDate.of(2018, 1, 10));
         this.dateRange4 = new DateRange(LocalDate.of(2015, 1, 1),
-                LocalDate.of(2015, 1, 8));
+                LocalDate.of(2015, 1, 7));
+        this.dateRange5 = new DateRange(LocalDate.of(2015, 1, 2),
+                LocalDate.of(2015, 1, 7));
     }
 
     // Sample JUnit tests checking toYears works
@@ -37,7 +39,9 @@ class TestDateRange {
     @Test
     void testOverlapsTrue() {
         assertTrue(dateRange1.overlaps(dateRange2));
-        assertTrue(dateRange3.overlaps(dateRange4));
+        assertTrue(dateRange3.overlaps(dateRange4));    // Overlap of a single
+        assertTrue(dateRange1.overlaps(dateRange1));    // Same range
+        assertTrue(dateRange4.overlaps(dateRange5));    // Almost the same, except one day longer for 5
     }
 
     @Test
