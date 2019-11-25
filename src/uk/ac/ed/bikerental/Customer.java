@@ -43,7 +43,7 @@ public class Customer {
      * @param paymentInfo to pay for the booking
      * @return true if successful, false if not
      */
-    public boolean bookQuote(Quote quote, String paymentInfo) {
+    public Integer bookQuote(Quote quote, String paymentInfo) {
         return bookQuote(quote, paymentInfo, null);
     }
 
@@ -55,12 +55,12 @@ public class Customer {
      * @param deliveryLocation for the delivery to drop off the bikes
      * @return true if successful, false if not
      */
-    public boolean bookQuote(Quote quote, String paymentInfo, Location deliveryLocation) {
+    public Integer bookQuote(Quote quote, String paymentInfo, Location deliveryLocation) {
         Booking booking = quote.book(paymentInfo, deliveryLocation);
         if (booking != null) {
             bookings.put(booking.getID(), booking);
-            return true;
+            return booking.getID();
         }
-        return false;
+        return -1;
     }
 }

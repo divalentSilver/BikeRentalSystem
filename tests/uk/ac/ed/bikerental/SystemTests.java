@@ -1,6 +1,9 @@
 package uk.ac.ed.bikerental;
 
 import org.junit.jupiter.api.*;
+
+import uk.ac.ed.bikerental.Bike.BikeStatus;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
@@ -9,6 +12,7 @@ import java.util.*;
 
 public class SystemTests {
     private Location loc1 = new Location("EH8 9RD", "100 Meow St");
+    private Location loc2 = new Location("EH8 9RE", "104 Meow St");
     private Customer customer;
 
     @BeforeEach
@@ -68,4 +72,109 @@ public class SystemTests {
         assertEquals(new BigDecimal(390).stripTrailingZeros(), quote.getPrice().stripTrailingZeros());
         assertEquals(new BigDecimal(1100).stripTrailingZeros(), quote.getDeposit().stripTrailingZeros());
     }
+    
+    @Test
+    void testBookQuoteNoDelivery() {
+    	// Setup request
+        DateRange dateRange = new DateRange(LocalDate.of(2019, 1, 7),
+                LocalDate.of(2019, 1, 10));
+        Collection<BikeType> bikeTypes = new LinkedList<>();
+        bikeTypes.add(BikeType.findType("racing"));
+        bikeTypes.add(BikeType.findType("mountain"));
+
+        // Setup quote
+        LinkedList<Quote> quotes = customer.sendRequest(loc1, dateRange, bikeTypes);
+        Quote quote = quotes.getFirst();
+        String paymentInfo = "This is the payment information.";
+        
+        // Get booking result and check that it is correct
+        Integer bookingID = customer.bookQuote(quote, paymentInfo);
+    	Booking booking = customer.getBooking(bookingID);
+    	assertNotNull(booking.getID());
+    	assertTrue(dateRange.equals(booking.getDateRange()));
+    	Collection<Bike> bookedBikes = booking.getBikes();
+    	Collection<BikeType> bookedBikeTypes = new LinkedList<>();
+    	for(Bike bike: bookedBikes)
+    		bookedBikeTypes.add(bike.getType());
+    	//assertArrayEquals(bookedBikeTypes, bikeTypes);
+    }
+    
+    @Test
+    void testBookQuoteDelivery() {
+    	// Setup request
+        DateRange dateRange = new DateRange(LocalDate.now(),
+                LocalDate.now().plusDays(3));
+        Collection<BikeType> bikeTypes = new LinkedList<>();
+        bikeTypes.add(BikeType.findType("racing"));
+        bikeTypes.add(BikeType.findType("mountain"));
+
+        // Setup quote
+        LinkedList<Quote> quotes = customer.sendRequest(loc1, dateRange, bikeTypes);
+        Quote quote = quotes.getFirst();
+        String paymentInfo = "This is the payment information.";
+        
+        // Get booking result and check that it is correct
+        Integer bookingID = customer.bookQuote(quote, paymentInfo, loc1);
+    	Booking booking = customer.getBooking(bookingID);
+    	assertNotNull(booking.getID());
+    	assertTrue(dateRange.equals(booking.getDateRange()));
+    	Collection<Bike> bookedBikes = booking.getBikes();
+    	Collection<BikeType> bookedBikeTypes = new LinkedList<>();
+    	for(Bike bike: bookedBikes)
+    		bookedBikeTypes.add(bike.getType());
+    	//assertIterableEquals(bookedBikeTypes, bikeTypes);
+    	MockDeliveryService deliveryService = (MockDeliveryService) DeliveryServiceFactory.getDeliveryService();
+    	assertNotNull(deliveryService.getPickupsOn(dateRange.getStart()));
+    	assertNotNull(deliveryService.getDropoffs());
+    }
+    
+    @Test
+    void testReturnToProvider() {
+    	// Setup request
+        DateRange dateRange = new DateRange(LocalDate.now(),
+                LocalDate.now().plusDays(3));
+        Collection<BikeType> bikeTypes = new LinkedList<>();
+        bikeTypes.add(BikeType.findType("racing"));
+        bikeTypes.add(BikeType.findType("mountain"));
+
+        // Setup quote
+        LinkedList<Quote> quotes = customer.sendRequest(loc1, dateRange, bikeTypes);
+        Quote quote = quotes.getFirst();
+        String paymentInfo = "This is the payment information.";
+        
+        // Setup booking
+        Integer bookingID = customer.bookQuote(quote, paymentInfo, loc1);
+    	Booking booking = customer.getBooking(bookingID);
+    	Collection<Bike> bookedBikes = booking.getBikes();
+    	    	
+    	// Check the bike status
+    	
+    }
+    
+    @Test
+    void testReturnToPartner() {
+    	// Setup request
+        DateRange dateRange = new DateRange(LocalDate.now(),
+                LocalDate.now().plusDays(3));
+        Collection<BikeType> bikeTypes = new LinkedList<>();
+        bikeTypes.add(BikeType.findType("racing"));
+        bikeTypes.add(BikeType.findType("mountain"));
+
+        // Setup quote
+        LinkedList<Quote> quotes = customer.sendRequest(loc1, dateRange, bikeTypes);
+        Quote quote = quotes.getFirst();
+        String paymentInfo = "This is the payment information.";
+        
+        // Setup booking
+        Integer bookingID = customer.bookQuote(quote, paymentInfo, loc1);
+    	Booking booking = customer.getBooking(bookingID);
+    	Collection<Bike> bookedBikes = booking.getBikes();
+    	    	
+    	// Check the bike status at each step
+    	MockDeliveryService deliveryService = (MockDeliveryService) DeliveryServiceFactory.getDeliveryService();
+    	deliveryService.carryOutDropoffs();
+    	for(Bike bike: bookedBikes)
+    		assertEquals(bike.getStatus(dateRange), BikeStatus.atPartner);
+    }
+    
 }

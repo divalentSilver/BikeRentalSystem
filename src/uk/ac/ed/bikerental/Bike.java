@@ -1,5 +1,6 @@
 package uk.ac.ed.bikerental;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 
 public class Bike implements Deliverable {
@@ -26,6 +27,14 @@ public class Bike implements Deliverable {
 
     public Location getLocation() {
         return location;
+    }
+    
+    public BikeStatus getStatus(DateRange dateRange) {
+    	for (DateRange busyRange: busyDates.keySet()) {
+            if (busyRange.overlaps(dateRange))
+                return busyDates.get(dateRange);
+        }
+		return null;
     }
 
     public boolean markFree(DateRange dateRange) {
@@ -60,14 +69,33 @@ public class Bike implements Deliverable {
         return true;
     }
 
-
     @Override
     public void onPickup() {
-        // TODO: Implement
+    	// find the target date range
+    	DateRange pickupDateRange = new DateRange(LocalDate.now(), LocalDate.now());
+    	DateRange targetDateRange = null;
+    	for (DateRange busyRange: busyDates.keySet()) {
+            if (busyRange.overlaps(pickupDateRange)) {
+            	targetDateRange = busyRange;
+            }
+        }
+    	
+    	// set the bike status as 'withCustomer'
+    	busyDates.put(targetDateRange, BikeStatus.withCustomer);
     }
 
     @Override
     public void onDropoff() {
-        // TODO: Implement
+    	// find the target date range
+    	DateRange pickupDateRange = new DateRange(LocalDate.now(), LocalDate.now());
+    	DateRange targetDateRange = null;
+    	for (DateRange busyRange: busyDates.keySet()) {
+            if (busyRange.overlaps(pickupDateRange)) {
+            	targetDateRange = busyRange;
+            }
+        }
+    	
+    	// set the bike status as 'atPartner'
+    	busyDates.put(targetDateRange, BikeStatus.atPartner);
     }
 }
