@@ -79,11 +79,13 @@ public class Bike implements Deliverable, Comparable {
     	for (DateRange busyRange: busyDates.keySet()) {
             if (busyRange.overlaps(pickupDateRange)) {
             	targetDateRange = busyRange;
+            	break;
             }
         }
     	
     	// set the bike status as 'withCustomer'
-    	busyDates.put(targetDateRange, BikeStatus.withCustomer);
+        if (targetDateRange != null)
+            busyDates.put(targetDateRange, BikeStatus.withCustomer);
     }
 
     @Override
@@ -94,11 +96,13 @@ public class Bike implements Deliverable, Comparable {
     	for (DateRange busyRange: busyDates.keySet()) {
             if (busyRange.overlaps(pickupDateRange)) {
             	targetDateRange = busyRange;
+            	break;
             }
         }
     	
     	// set the bike status as 'atPartner'
-    	busyDates.put(targetDateRange, BikeStatus.atPartner);
+        if (targetDateRange != null)
+        	busyDates.remove(targetDateRange);
     }
 
     @Override
