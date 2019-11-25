@@ -2,8 +2,10 @@ package uk.ac.ed.bikerental;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Objects;
 
-public class Bike implements Deliverable {
+public class Bike implements Deliverable, Comparable {
+
     enum BikeStatus {
         atPartner,
         inRepair,
@@ -97,5 +99,22 @@ public class Bike implements Deliverable {
     	
     	// set the bike status as 'atPartner'
     	busyDates.put(targetDateRange, BikeStatus.atPartner);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return getType().compareTo(o);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        // equals method for testing equality in tests
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        return ((Bike) obj).getType().equals(getType());
     }
 }

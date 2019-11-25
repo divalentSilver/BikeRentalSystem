@@ -3,14 +3,16 @@ package uk.ac.ed.bikerental;
 import java.math.BigDecimal;
 import java.util.HashMap;
 
-public class BikeType {
+public class BikeType implements Comparable {
     // To avoid duplicate BikeTypes, keep a static map of them
     private static HashMap<String, BikeType> bikeTypes = new HashMap<>();
     private BigDecimal replacementValue;
+    private String name;
 
     // This constructor is private because external classes should never directly initialize it
-    private BikeType(BigDecimal replacementValue) {
+    private BikeType(BigDecimal replacementValue, String name) {
         this.replacementValue = replacementValue;
+        this.name = name;
     }
 
     // Look up an existing BikeType
@@ -28,11 +30,29 @@ public class BikeType {
         if (bikeTypes.containsKey(name))
             bikeTypes.get(name).replacementValue = replacementValue;
         else
-            bikeTypes.put(name, new BikeType(replacementValue));
+            bikeTypes.put(name, new BikeType(replacementValue, name));
         return findType(name);
     }
 
     public BigDecimal getReplacementValue() {
         return replacementValue;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        assert getClass() == o.getClass();
+        return name.compareTo(((BikeType) o).name);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        // equals method for testing equality in tests
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        return name.equals(((BikeType) obj).name);
     }
 }

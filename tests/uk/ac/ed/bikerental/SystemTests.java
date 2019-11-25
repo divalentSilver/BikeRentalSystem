@@ -15,6 +15,27 @@ public class SystemTests {
     private Location loc2 = new Location("EH8 9RE", "104 Meow St");
     private Customer customer;
 
+    /*
+    Compares two lists without order mattering. Objects in the lists must be comparable.
+     */
+    private boolean equalLists(List a, List b) {
+        Collections.sort(a);
+        Collections.sort(b);
+        return a.equals(b);
+    }
+
+    @Test void testEqualLists() {
+        LinkedList<Integer> a = new LinkedList<>();
+        LinkedList<Integer> b = new LinkedList<>();
+        for (int i = 0; i < 10; i++) {
+            a.add(i);
+            b.add(i);
+        }
+        Collections.shuffle(a);
+        Collections.shuffle(b);
+        assertTrue(equalLists(a, b));
+    }
+
     @BeforeEach
     void setUp() throws Exception {
         // Clear just in case
@@ -90,8 +111,7 @@ public class SystemTests {
         // Get booking result and check that it is correct
         Integer bookingID = customer.bookQuote(quote, paymentInfo);
     	Booking booking = customer.getBooking(bookingID);
-    	assertNotNull(booking.getID());
-    	assertTrue(dateRange.equals(booking.getDateRange()));
+        assertEquals(dateRange, booking.getDateRange());
     	Collection<Bike> bookedBikes = booking.getBikes();
     	Collection<BikeType> bookedBikeTypes = new LinkedList<>();
     	for(Bike bike: bookedBikes)
@@ -116,8 +136,7 @@ public class SystemTests {
         // Get booking result and check that it is correct
         Integer bookingID = customer.bookQuote(quote, paymentInfo, loc1);
     	Booking booking = customer.getBooking(bookingID);
-    	assertNotNull(booking.getID());
-    	assertTrue(dateRange.equals(booking.getDateRange()));
+        assertEquals(dateRange, booking.getDateRange());
     	Collection<Bike> bookedBikes = booking.getBikes();
     	Collection<BikeType> bookedBikeTypes = new LinkedList<>();
     	for(Bike bike: bookedBikes)
