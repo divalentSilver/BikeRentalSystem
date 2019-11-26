@@ -3,6 +3,8 @@ package uk.ac.ed.bikerental;
 import java.math.BigDecimal;
 import java.util.Collection;
 
+import uk.ac.ed.bikerental.Bike.BikeStatus;
+
 public class Booking {
     private static int IDCounter = 0;
 
@@ -45,4 +47,24 @@ public class Booking {
     public Collection<Bike> getBikes() {
         return quote.getBikes();
     }
+    
+    public void markReturned(Location returnLocation) {
+    	Collection<Bike> bikes = getBikes();
+    	for (Bike bike: bikes) {
+    		if (returnLocation == bike.getLocation()) {
+    			// when the customer returns the bikes to the original provider
+    			bike.markFree(getDateRange());
+    		}
+    		else {
+    			// when the customer returns the bikes to the partner
+    			bike.setStatus(getDateRange(), BikeStatus.atPartner);
+    		}
+    	}
+    	this.returnDeposit(paymentInfo);
+    }
+    
+    private void returnDeposit(String paymentInfo) {
+    	
+    }
+    
 }

@@ -24,7 +24,8 @@ public class SystemTests {
         return a.equals(b);
     }
 
-    @Test void testEqualLists() {
+    @Test 
+    void testEqualLists() {
         LinkedList<Integer> a = new LinkedList<>();
         LinkedList<Integer> b = new LinkedList<>();
         for (int i = 0; i < 10; i++) {
@@ -58,6 +59,7 @@ public class SystemTests {
         bill.addBike(BikeType.setBikeType("mountain", new BigDecimal(1000)));
         bill.getPricingPolicy().setDailyRentalPrice(BikeType.findType("racing"), new BigDecimal(100));
         bill.getPricingPolicy().setDailyRentalPrice(BikeType.findType("mountain"), new BigDecimal(30));
+        
     }
     
     // TODO: Write system tests covering the three main use cases
@@ -66,8 +68,7 @@ public class SystemTests {
     void testGetQuotesEmpty() {
         // Setup request
         Location loc = new Location("EZ8 5ZP", "fake");
-        DateRange dateRange = new DateRange(LocalDate.of(2019, 1, 7),
-                LocalDate.of(2019, 1, 10));
+        DateRange dateRange = new DateRange(LocalDate.of(2019, 1, 7), LocalDate.of(2019, 1, 10));
         Collection<BikeType> bikeTypes = new LinkedList<>();
         bikeTypes.add(BikeType.findType("racing"));
         bikeTypes.add(BikeType.findType("mountain"));
@@ -80,8 +81,7 @@ public class SystemTests {
     @Test
     void testGetQuotesSuccessful() {
         // Setup request
-        DateRange dateRange = new DateRange(LocalDate.of(2019, 1, 7),
-                LocalDate.of(2019, 1, 10));
+        DateRange dateRange = new DateRange(LocalDate.of(2019, 1, 7), LocalDate.of(2019, 1, 10));
         Collection<BikeType> bikeTypes = new LinkedList<>();
         bikeTypes.add(BikeType.findType("racing"));
         bikeTypes.add(BikeType.findType("mountain"));
@@ -97,9 +97,8 @@ public class SystemTests {
     @Test
     void testBookQuoteNoDelivery() {
     	// Setup request
-        DateRange dateRange = new DateRange(LocalDate.of(2019, 1, 7),
-                LocalDate.of(2019, 1, 10));
-        Collection<BikeType> bikeTypes = new LinkedList<>();
+        DateRange dateRange = new DateRange(LocalDate.of(2019, 1, 7), LocalDate.of(2019, 1, 10));
+        LinkedList<BikeType> bikeTypes = new LinkedList<>();
         bikeTypes.add(BikeType.findType("racing"));
         bikeTypes.add(BikeType.findType("mountain"));
 
@@ -113,18 +112,17 @@ public class SystemTests {
     	Booking booking = customer.getBooking(bookingID);
         assertEquals(dateRange, booking.getDateRange());
     	Collection<Bike> bookedBikes = booking.getBikes();
-    	Collection<BikeType> bookedBikeTypes = new LinkedList<>();
+    	LinkedList<BikeType> bookedBikeTypes = new LinkedList<>();
     	for(Bike bike: bookedBikes)
     		bookedBikeTypes.add(bike.getType());
-    	//assertArrayEquals(bookedBikeTypes, bikeTypes);
+    	//assertTrue(equalLists(bookedBikeTypes, bikeTypes));
     }
     
     @Test
     void testBookQuoteDelivery() {
     	// Setup request
-        DateRange dateRange = new DateRange(LocalDate.now(),
-                LocalDate.now().plusDays(3));
-        Collection<BikeType> bikeTypes = new LinkedList<>();
+        DateRange dateRange = new DateRange(LocalDate.now(), LocalDate.now().plusDays(3));
+        LinkedList<BikeType> bikeTypes = new LinkedList<>();
         bikeTypes.add(BikeType.findType("racing"));
         bikeTypes.add(BikeType.findType("mountain"));
 
@@ -138,20 +136,18 @@ public class SystemTests {
     	Booking booking = customer.getBooking(bookingID);
         assertEquals(dateRange, booking.getDateRange());
     	Collection<Bike> bookedBikes = booking.getBikes();
-    	Collection<BikeType> bookedBikeTypes = new LinkedList<>();
+    	LinkedList<BikeType> bookedBikeTypes = new LinkedList<>();
     	for(Bike bike: bookedBikes)
     		bookedBikeTypes.add(bike.getType());
-    	//assertIterableEquals(bookedBikeTypes, bikeTypes);
+    	//assertTrue(equalLists(bookedBikeTypes, bikeTypes));
     	MockDeliveryService deliveryService = (MockDeliveryService) DeliveryServiceFactory.getDeliveryService();
     	assertNotNull(deliveryService.getPickupsOn(dateRange.getStart()));
-    	assertNotNull(deliveryService.getDropoffs());
     }
     
     @Test
     void testReturnToProvider() {
     	// Setup request
-        DateRange dateRange = new DateRange(LocalDate.now(),
-                LocalDate.now().plusDays(3));
+        DateRange dateRange = new DateRange(LocalDate.now(), LocalDate.now().plusDays(3));
         Collection<BikeType> bikeTypes = new LinkedList<>();
         bikeTypes.add(BikeType.findType("racing"));
         bikeTypes.add(BikeType.findType("mountain"));
@@ -165,16 +161,19 @@ public class SystemTests {
         Integer bookingID = customer.bookQuote(quote, paymentInfo, loc1);
     	Booking booking = customer.getBooking(bookingID);
     	Collection<Bike> bookedBikes = booking.getBikes();
-    	    	
-    	// Check the bike status
     	
+    	// Check the bike status
+    	customer.returnBikes(booking, loc1);
+    	for(Bike bike : bookedBikes) {
+        	assertFalse(bike.isBusy(dateRange));
+    	}
+
     }
     
     @Test
     void testReturnToPartner() {
     	// Setup request
-        DateRange dateRange = new DateRange(LocalDate.now(),
-                LocalDate.now().plusDays(3));
+        DateRange dateRange = new DateRange(LocalDate.now(), LocalDate.now().plusDays(3));
         Collection<BikeType> bikeTypes = new LinkedList<>();
         bikeTypes.add(BikeType.findType("racing"));
         bikeTypes.add(BikeType.findType("mountain"));
@@ -188,12 +187,11 @@ public class SystemTests {
         Integer bookingID = customer.bookQuote(quote, paymentInfo, loc1);
     	Booking booking = customer.getBooking(bookingID);
     	Collection<Bike> bookedBikes = booking.getBikes();
-    	    	
-    	// Check the bike status at each step
-    	MockDeliveryService deliveryService = (MockDeliveryService) DeliveryServiceFactory.getDeliveryService();
-    	deliveryService.carryOutDropoffs();
-    	for(Bike bike: bookedBikes)
+
+    	// Check the bike status
+    	customer.returnBikes(booking, loc2);
+    	for(Bike bike: bookedBikes) {
     		assertEquals(bike.getStatus(dateRange), BikeStatus.atPartner);
+    	}
     }
-    
 }

@@ -59,7 +59,7 @@ public class Quote {
                 return null;
         // Now mark the bikes are busy
         for (Bike bike: getBikes())
-            bike.markBusy(getDateRange(), Bike.BikeStatus.withCustomer);
+            bike.markBusy(getDateRange(), Bike.BikeStatus.atProvider);
         // Schedule delivery, if desired
         if (deliveryLocation != null) {
             for (Bike bike: getBikes())

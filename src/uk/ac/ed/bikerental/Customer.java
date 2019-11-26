@@ -63,4 +63,9 @@ public class Customer {
         }
         return -1;
     }
+    
+    public void returnBikes(Booking booking, Location returnLocation) {
+    	booking.markReturned(returnLocation);
+    }
+    
 }

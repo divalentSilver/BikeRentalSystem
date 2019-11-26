@@ -8,6 +8,7 @@ public class Bike implements Deliverable, Comparable {
 
     enum BikeStatus {
         atPartner,
+        atProvider,
         inRepair,
         inDelivery,
         withCustomer
@@ -37,6 +38,10 @@ public class Bike implements Deliverable, Comparable {
                 return busyDates.get(dateRange);
         }
 		return null;
+    }
+    
+    public void setStatus(DateRange dateRange, BikeStatus status) {
+        busyDates.put(dateRange, status);
     }
 
     public boolean markFree(DateRange dateRange) {
@@ -83,9 +88,9 @@ public class Bike implements Deliverable, Comparable {
             }
         }
     	
-    	// set the bike status as 'withCustomer'
+    	// set the bike status as 'inDelivery'
         if (targetDateRange != null)
-            busyDates.put(targetDateRange, BikeStatus.withCustomer);
+            busyDates.put(targetDateRange, BikeStatus.inDelivery);
     }
 
     @Override
@@ -93,16 +98,27 @@ public class Bike implements Deliverable, Comparable {
     	// find the target date range
     	DateRange pickupDateRange = new DateRange(LocalDate.now(), LocalDate.now());
     	DateRange targetDateRange = null;
+    	Boolean deliveryToPartner = false;
     	for (DateRange busyRange: busyDates.keySet()) {
             if (busyRange.overlaps(pickupDateRange)) {
             	targetDateRange = busyRange;
+            	if (targetDateRange.getStart() == busyRange.getStart()) {
+            		deliveryToPartner = true;
+            	}
             	break;
             }
         }
     	
-    	// set the bike status as 'atPartner'
-        if (targetDateRange != null)
-        	busyDates.remove(targetDateRange);
+    	// change the bike status depending on the situation
+        if (targetDateRange != null) {
+        	if (deliveryToPartner) {
+        		// in case of delivering from the original provider to the partner
+        		busyDates.put(targetDateRange, BikeStatus.atPartner);
+        	} else {
+        		// in case of delivering from the partner to the original provider
+        		markFree(targetDateRange);
+        	}
+        }
     }
 
     @Override
