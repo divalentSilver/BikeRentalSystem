@@ -140,7 +140,8 @@ public class SystemTests {
     	for(Bike bike: bookedBikes)
     		bookedBikeTypes.add(bike.getType());
     	assertTrue(equalLists(bookedBikeTypes, bikeTypes));
-    	MockDeliveryService deliveryService = (MockDeliveryService) DeliveryServiceFactory.getDeliveryService();
+    	MockDeliveryService deliveryService = (MockDeliveryService)
+    			DeliveryServiceFactory.getDeliveryService();
     	assertNotNull(deliveryService.getPickupsOn(dateRange.getStart()));
     }
     

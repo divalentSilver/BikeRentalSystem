@@ -64,7 +64,8 @@ public class Booking {
     }
     
     private void returnDeposit(String paymentInfo) {
-    	
+    	// Should be implemented as a separate module dedicated to handling payment information
+    	// due to its sensitivity
     }
     
 }

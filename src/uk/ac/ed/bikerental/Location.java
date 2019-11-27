@@ -1,7 +1,13 @@
 package uk.ac.ed.bikerental;
 
 public class Location {
+	/**
+	 * The string which post code of the location is stored.
+	 */
     private String postcode;
+    /**
+     * The string which address of the location is stored.
+     */
     private String address;
 
     public Location(String postcode, String address) {
