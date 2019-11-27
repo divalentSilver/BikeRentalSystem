@@ -88,7 +88,7 @@ public class SystemTests {
         LinkedList<Quote> quotes = customer.sendRequest(loc1, dateRange, bikeTypes);
         assertEquals(1, quotes.size());
         Quote quote = quotes.getFirst();
-        assertEquals(new BigDecimal(390).stripTrailingZeros(), quote.getPrice().stripTrailingZeros());
+        assertEquals(new BigDecimal(520).stripTrailingZeros(), quote.getPrice().stripTrailingZeros());
         assertEquals(new BigDecimal(1100).stripTrailingZeros(), quote.getDeposit().stripTrailingZeros());
     }
     
@@ -110,10 +110,15 @@ public class SystemTests {
     	Booking booking = customer.getBooking(bookingID);
         assertEquals(dateRange, booking.getDateRange());
     	List<Bike> bookedBikes = booking.getBikes();
+    	
     	LinkedList<BikeType> bookedBikeTypes = new LinkedList<>();
     	for(Bike bike: bookedBikes)
     		bookedBikeTypes.add(bike.getType());
     	assertTrue(equalLists(bookedBikeTypes, bikeTypes));
+    	
+    	// Check the booking's price and deposit
+    	assertEquals(new BigDecimal(520).stripTrailingZeros(), booking.getPrice().stripTrailingZeros());
+    	assertEquals(new BigDecimal(1100).stripTrailingZeros(), booking.getDeposit().stripTrailingZeros());
     }
     
     @Test
@@ -193,4 +198,5 @@ public class SystemTests {
     		assertEquals(bike.getStatus(dateRange), BikeStatus.atPartner);
     	}
     }
+    
 }
