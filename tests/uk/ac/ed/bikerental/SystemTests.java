@@ -69,12 +69,12 @@ public class SystemTests {
         // Setup request
         Location loc = new Location("EZ8 5ZP", "fake");
         DateRange dateRange = new DateRange(LocalDate.of(2019, 1, 7), LocalDate.of(2019, 1, 10));
-        Collection<BikeType> bikeTypes = new LinkedList<>();
+        List<BikeType> bikeTypes = new LinkedList<>();
         bikeTypes.add(BikeType.findType("racing"));
         bikeTypes.add(BikeType.findType("mountain"));
 
         // Send request and retrieve quotes, which should be empty (cannot be fulfilled)
-        Collection<Quote> quotes = customer.sendRequest(loc, dateRange, bikeTypes);
+        List<Quote> quotes = customer.sendRequest(loc, dateRange, bikeTypes);
         assertEquals(new LinkedList<Quote>(), quotes);
     }
 
@@ -82,7 +82,7 @@ public class SystemTests {
     void testGetQuotesSuccessful() {
         // Setup request
         DateRange dateRange = new DateRange(LocalDate.of(2019, 1, 7), LocalDate.of(2019, 1, 10));
-        Collection<BikeType> bikeTypes = new LinkedList<>();
+        List<BikeType> bikeTypes = new LinkedList<>();
         bikeTypes.add(BikeType.findType("racing"));
         bikeTypes.add(BikeType.findType("mountain"));
 
@@ -111,11 +111,11 @@ public class SystemTests {
         Integer bookingID = customer.bookQuote(quote, paymentInfo);
     	Booking booking = customer.getBooking(bookingID);
         assertEquals(dateRange, booking.getDateRange());
-    	Collection<Bike> bookedBikes = booking.getBikes();
+    	List<Bike> bookedBikes = booking.getBikes();
     	LinkedList<BikeType> bookedBikeTypes = new LinkedList<>();
     	for(Bike bike: bookedBikes)
     		bookedBikeTypes.add(bike.getType());
-    	//assertTrue(equalLists(bookedBikeTypes, bikeTypes));
+    	assertTrue(equalLists(bookedBikeTypes, bikeTypes));
     }
     
     @Test
@@ -135,11 +135,11 @@ public class SystemTests {
         Integer bookingID = customer.bookQuote(quote, paymentInfo, loc1);
     	Booking booking = customer.getBooking(bookingID);
         assertEquals(dateRange, booking.getDateRange());
-    	Collection<Bike> bookedBikes = booking.getBikes();
+        List<Bike> bookedBikes = booking.getBikes();
     	LinkedList<BikeType> bookedBikeTypes = new LinkedList<>();
     	for(Bike bike: bookedBikes)
     		bookedBikeTypes.add(bike.getType());
-    	//assertTrue(equalLists(bookedBikeTypes, bikeTypes));
+    	assertTrue(equalLists(bookedBikeTypes, bikeTypes));
     	MockDeliveryService deliveryService = (MockDeliveryService) DeliveryServiceFactory.getDeliveryService();
     	assertNotNull(deliveryService.getPickupsOn(dateRange.getStart()));
     }
@@ -148,7 +148,7 @@ public class SystemTests {
     void testReturnToProvider() {
     	// Setup request
         DateRange dateRange = new DateRange(LocalDate.now(), LocalDate.now().plusDays(3));
-        Collection<BikeType> bikeTypes = new LinkedList<>();
+        List<BikeType> bikeTypes = new LinkedList<>();
         bikeTypes.add(BikeType.findType("racing"));
         bikeTypes.add(BikeType.findType("mountain"));
 
@@ -160,7 +160,7 @@ public class SystemTests {
         // Setup booking
         Integer bookingID = customer.bookQuote(quote, paymentInfo, loc1);
     	Booking booking = customer.getBooking(bookingID);
-    	Collection<Bike> bookedBikes = booking.getBikes();
+        List<Bike> bookedBikes = booking.getBikes();
     	
     	// Check the bike status
     	customer.returnBikes(booking, loc1);
@@ -174,7 +174,7 @@ public class SystemTests {
     void testReturnToPartner() {
     	// Setup request
         DateRange dateRange = new DateRange(LocalDate.now(), LocalDate.now().plusDays(3));
-        Collection<BikeType> bikeTypes = new LinkedList<>();
+        List<BikeType> bikeTypes = new LinkedList<>();
         bikeTypes.add(BikeType.findType("racing"));
         bikeTypes.add(BikeType.findType("mountain"));
 
@@ -186,7 +186,7 @@ public class SystemTests {
         // Setup booking
         Integer bookingID = customer.bookQuote(quote, paymentInfo, loc1);
     	Booking booking = customer.getBooking(bookingID);
-    	Collection<Bike> bookedBikes = booking.getBikes();
+        List<Bike> bookedBikes = booking.getBikes();
 
     	// Check the bike status
     	customer.returnBikes(booking, loc2);

@@ -1,16 +1,16 @@
 package uk.ac.ed.bikerental;
 
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.List;
 
 public class Quote {
     private Provider provider;
     private BigDecimal price;
     private BigDecimal deposit;
     private DateRange dateRange;
-    private Collection<Bike> bikes;
+    private List<Bike> bikes;
 
-    public Quote(Provider provider, DateRange dateRange, Collection<Bike> bikes) {
+    public Quote(Provider provider, DateRange dateRange, List<Bike> bikes) {
         this.provider = provider;
         this.bikes = bikes;
         this.dateRange = dateRange;
@@ -39,7 +39,7 @@ public class Quote {
         return dateRange;
     }
 
-    public Collection<Bike> getBikes() {
+    public List<Bike> getBikes() {
         return bikes;
     }
 

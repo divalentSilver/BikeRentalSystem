@@ -57,15 +57,16 @@ public class Provider {
      * @return a Quote if the request can be fulfilled, otherwise null
      */
     public Quote generateQuote(DateRange dateRange, Collection<BikeType> bikeRequests) {
-        Collection<Bike> validBikes = new LinkedList<>();
+        LinkedList<Bike> validBikes = new LinkedList<>();
+        LinkedList<BikeType> requests = new LinkedList<>(bikeRequests);
         for (Bike bike: bikes)
             // If bike is right type and not busy, save and remove from the list of bike requests
-            if (!bike.isBusy(dateRange) && bikeRequests.contains(bike.getType())) {
+            if (!bike.isBusy(dateRange) && requests.contains(bike.getType())) {
                 validBikes.add(bike);
-                bikeRequests.remove(bike.getType());
+                requests.remove(bike.getType());
             }
         // If bike requests have all been fulfilled, return Quote, otherwise null
-        if (bikeRequests.isEmpty() && !validBikes.isEmpty())
+        if (requests.isEmpty() && !validBikes.isEmpty())
             return new Quote(this, dateRange, validBikes);
         return null;
     }

@@ -1,7 +1,7 @@
 package uk.ac.ed.bikerental;
 
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.List;
 
 import uk.ac.ed.bikerental.Bike.BikeStatus;
 
@@ -44,12 +44,12 @@ public class Booking {
         return quote.getDateRange();
     }
 
-    public Collection<Bike> getBikes() {
+    public List<Bike> getBikes() {
         return quote.getBikes();
     }
     
     public void markReturned(Location returnLocation) {
-    	Collection<Bike> bikes = getBikes();
+        List<Bike> bikes = getBikes();
     	for (Bike bike: bikes) {
     		if (returnLocation == bike.getLocation()) {
     			// when the customer returns the bikes to the original provider
