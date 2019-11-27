@@ -1,5 +1,8 @@
 package uk.ac.ed.bikerental;
 
+/**
+ * This class represents a location.
+ */
 public class Location {
 	/**
 	 * The string which post code of the location is stored.
