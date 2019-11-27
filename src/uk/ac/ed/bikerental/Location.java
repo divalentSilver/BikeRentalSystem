@@ -1,5 +1,8 @@
 package uk.ac.ed.bikerental;
 
+/**
+ * This class represents a location.
+ */
 public class Location {
 	/**
 	 * The string which post code of the location is stored.
@@ -10,6 +13,9 @@ public class Location {
      */
     private String address;
 
+    /**
+     * Class constructor specifying post code and address.
+     */
     public Location(String postcode, String address) {
         assert postcode.length() >= 6;
         this.postcode = postcode;
