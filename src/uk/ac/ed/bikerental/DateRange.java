@@ -53,10 +53,10 @@ public class DateRange {
 
     /**
      * Returns the length of time in days represented by this date range.
-     * @return The number of years represented by this date range
+     * @return The number of days represented by this date range
      */
     public long toDays() {
-        return ChronoUnit.DAYS.between(this.getStart(), this.getEnd());
+        return ChronoUnit.DAYS.between(this.getStart(), this.getEnd()) + 1l;
     }
 
     /**

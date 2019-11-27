@@ -13,7 +13,6 @@ class TestLocation {
         this.loc3 = new Location("ED8 4GE", "104 Meow St");
     }
     
-    // Sample JUnit tests checking toYears works
     @Test
     void testIsNearToTrue() {
     	assertTrue(loc1.isNearTo(loc2));

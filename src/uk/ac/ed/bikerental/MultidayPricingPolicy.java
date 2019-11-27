@@ -18,7 +18,8 @@ public class MultidayPricingPolicy extends DefaultPricingPolicy {
      * @return the final price that will be charged to the customer
      */
     private static BigDecimal applyDiscount(BigDecimal price, BigDecimal discount) {
-        return price.multiply(discount).movePointLeft(2);
+        BigDecimal discountPortion = price.multiply(discount).movePointLeft(2);
+        return price.subtract(discountPortion);
     }
 
     /**

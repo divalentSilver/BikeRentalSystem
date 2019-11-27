@@ -59,10 +59,8 @@ public class SystemTests {
         bill.addBike(BikeType.setBikeType("mountain", new BigDecimal(1000)));
         bill.getPricingPolicy().setDailyRentalPrice(BikeType.findType("racing"), new BigDecimal(100));
         bill.getPricingPolicy().setDailyRentalPrice(BikeType.findType("mountain"), new BigDecimal(30));
-        
+
     }
-    
-    // TODO: Write system tests covering the three main use cases
 
     @Test
     void testGetQuotesEmpty() {

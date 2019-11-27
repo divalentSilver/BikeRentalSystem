@@ -37,11 +37,16 @@ class TestDateRange {
     }
 
     @Test
+    void testToDays() {
+        assertEquals(1100, this.dateRange3.toDays());
+    }
+
+    @Test
     void testOverlapsTrue() {
         assertTrue(dateRange1.overlaps(dateRange2));
-        assertTrue(dateRange3.overlaps(dateRange4));    // Overlap of a single
-        assertTrue(dateRange1.overlaps(dateRange1));    // Same range
-        assertTrue(dateRange4.overlaps(dateRange5));    // Almost the same, except one day longer for 5
+        assertTrue(dateRange3.overlaps(dateRange4));    // Overlap of a single day
+        assertTrue(dateRange1.overlaps(dateRange1));    // Overlap with itself
+        assertTrue(dateRange4.overlaps(dateRange5));    // Almost the same, except one day longer for date range 5
     }
 
     @Test
