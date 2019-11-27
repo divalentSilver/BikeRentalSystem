@@ -10,6 +10,9 @@ public class Location {
      */
     private String address;
 
+    /**
+     * Class constructor specifying post code and address.
+     */
     public Location(String postcode, String address) {
         assert postcode.length() >= 6;
         this.postcode = postcode;
